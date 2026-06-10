@@ -144,7 +144,14 @@ def suggest_outfit(new_item: dict, wardrobe: dict) -> str:
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
     )
-    return response.choices[0].message.content.strip()
+    llm_text = response.choices[0].message.content.strip()
+
+    if not wardrobe_items:
+        return (
+            "You haven't added any wardrobe items yet — here's some general styling advice for this piece:\n\n"
+            + llm_text
+        )
+    return llm_text
 
 
 # ── Tool 3: create_fit_card ───────────────────────────────────────────────────

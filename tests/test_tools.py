@@ -60,13 +60,15 @@ def test_suggest_outfit_with_wardrobe():
 
 
 def test_suggest_outfit_empty_wardrobe():
-    # Failure mode: empty wardrobe should return general advice, not crash
+    # Failure mode: empty wardrobe should return labeled general advice, not crash
     results = search_listings("vintage graphic tee", size=None, max_price=50)
     assert results
     item = results[0]
     suggestion = suggest_outfit(item, get_empty_wardrobe())
     assert isinstance(suggestion, str)
     assert len(suggestion) > 0
+    # Must self-identify as general advice (not look like a normal outfit suggestion)
+    assert "general styling advice" in suggestion.lower() or "haven't added" in suggestion.lower()
 
 
 # ── create_fit_card ───────────────────────────────────────────────────────────

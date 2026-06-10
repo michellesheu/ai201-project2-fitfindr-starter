@@ -15,36 +15,49 @@ You must have at least 3 tools. The three required tools are listed — add any 
 ### Tool 1: search_listings
 
 **What it does:**
+
 <!-- Describe what this tool does in 1–2 sentences -->
 
+The tool searches the mock listings dataset and returns matching items. It must handle the case where no matches are found.
 **Input parameters:**
+
 <!-- List each parameter, its type, and what it represents -->
-- `description` (str): ...
-- `size` (str): ...
-- `max_price` (float): ...
+
+- `description` (str): clothing description
+- `size` (str): the item size
+- `max_price` (float): the max price
 
 **What it returns:**
+
 <!-- Describe the return value — what fields does a result contain? -->
 
+Matching listings (description, size, max_price) sorted by relevance.
+
 **What happens if it fails or returns nothing:**
+
 <!-- What should the agent do if no listings match? -->
 
----
+FitFindr tells the user what to try differently and stops — it does not call suggest_outfit with empty input.
 
 ### Tool 2: suggest_outfit
 
 **What it does:**
+
 <!-- Describe what this tool does in 1–2 sentences -->
 
 **Input parameters:**
+
 <!-- List each parameter, its type, and what it represents -->
+
 - `new_item` (dict): ...
 - `wardrobe` (dict): ...
 
 **What it returns:**
+
 <!-- Describe the return value -->
 
 **What happens if it fails or returns nothing:**
+
 <!-- What should the agent do if the wardrobe is empty or no outfit can be suggested? -->
 
 ---
@@ -52,16 +65,21 @@ You must have at least 3 tools. The three required tools are listed — add any 
 ### Tool 3: create_fit_card
 
 **What it does:**
+
 <!-- Describe what this tool does in 1–2 sentences -->
 
 **Input parameters:**
+
 <!-- List each parameter, its type, and what it represents -->
+
 - `outfit` (...): ...
 
 **What it returns:**
+
 <!-- Describe the return value -->
 
 **What happens if it fails or returns nothing:**
+
 <!-- What should the agent do if the outfit data is incomplete? -->
 
 ---
@@ -75,6 +93,7 @@ You must have at least 3 tools. The three required tools are listed — add any 
 ## Planning Loop
 
 **How does your agent decide which tool to call next?**
+
 <!-- Describe the logic your planning loop uses. What does it look at? What conditions change its behavior? How does it know when it's done? -->
 
 ---
@@ -82,6 +101,7 @@ You must have at least 3 tools. The three required tools are listed — add any 
 ## State Management
 
 **How does information from one tool get passed to the next?**
+
 <!-- Describe how your agent stores and accesses state within a session. What data is tracked? How is it passed between tool calls? -->
 
 ---
@@ -90,11 +110,11 @@ You must have at least 3 tools. The three required tools are listed — add any 
 
 For each tool, describe the specific failure mode you're handling and what the agent does in response.
 
-| Tool | Failure mode | Agent response |
-|------|-------------|----------------|
-| search_listings | No results match the query | |
-| suggest_outfit | Wardrobe is empty | |
-| create_fit_card | Outfit input is missing or incomplete | |
+| Tool            | Failure mode                          | Agent response |
+| --------------- | ------------------------------------- | -------------- |
+| search_listings | No results match the query            |                |
+| suggest_outfit  | Wardrobe is empty                     |                |
+| create_fit_card | Outfit input is missing or incomplete |                |
 
 ---
 
@@ -134,16 +154,30 @@ For each tool, describe the specific failure mode you're handling and what the a
 
 Write out what a full user interaction looks like from start to finish — tool call by tool call. Use a specific example query.
 
+FitFindr is a multi-tool AI agent that helps users find secondhand clothing and figure out how to wear it. When a user describes what they're looking for, it calls search_listings to find matches, then suggest_outfit to build an outfit using their wardrobe, then create_fit_card to generate a shareable caption. If search_listings returns nothing, the agent tells the user what to try differently and stops. It never calls the next tool with empty input.
+
 **Example user query:** "I'm looking for a vintage graphic tee under $30. I mostly wear baggy jeans and chunky sneakers. What's out there and how would I style it?"
 
 **Step 1:**
+
 <!-- What does the agent do first? Which tool is called? With what input? -->
 
+The agent calls search_listings(description, size, max_price). If search_listings returns nothing, FitFindr tells the user what to try differently and stops. it does not call suggest_outfit with empty input.
+
 **Step 2:**
+
 <!-- What happens next? What was returned from step 1? What tool is called now? -->
 
+The sorted list[dict] is returned from step 1. Then suggest_outfit(new_item, wardrobe) is called and returns an outfit description. It must handle an empty or minimal wardrobe.
+
 **Step 3:**
+
 <!-- Continue until the full interaction is complete -->
 
+create_fit_card(outfit, new_item) is called and returns a short, shareable description of a complete outfit. It must produce something different each time for different inputs.
+
 **Final output to user:**
+
 <!-- What does the user actually see at the end? -->
+
+The user sees the fit card at the end.

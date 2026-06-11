@@ -14,3 +14,8 @@ env/
 
 # macOS
 .DS_Store
+
+# Project meta files
+DEMO_SCRIPT.md
+MILESTONES.md
+CLAUDE.md
